@@ -1,0 +1,23 @@
+---
+// 전체 태그 목록
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts } from '../../lib/posts';
+import { url } from '../../consts';
+
+const posts = await getPosts();
+const counts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+}
+const tags = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout title="태그">
+  <h1 class="page-title">태그</h1>
+  <p class="intro">주제별로 글을 모아 봤어요.</p>
+  <div class="tags">
+    {tags.map(([tag, count]) => (
+      <a class="tag" href={url(`tags/${tag}/`)}>#{tag} ({count})</a>
+    ))}
+  </div>
+</BaseLayout>

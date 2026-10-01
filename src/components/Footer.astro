@@ -1,0 +1,10 @@
+---
+import { AUTHOR, url } from '../consts';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    © {year} {AUTHOR} · Astro로 만들었어요 · <a href={url('rss.xml')}>RSS</a>
+  </div>
+</footer>

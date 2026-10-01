@@ -1,0 +1,22 @@
+---
+import { SITE_TITLE, url } from '../consts';
+
+// 현재 주소를 보고 메뉴에 active 표시
+const path = Astro.url.pathname;
+const links = [
+  { href: url(''), label: '글' },
+  { href: url('tags/'), label: '태그' },
+  { href: url('about/'), label: '소개' },
+];
+---
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href={url('')}>{SITE_TITLE}</a>
+    <nav class="nav">
+      {links.map((l) => (
+        <a href={l.href} class={path === l.href ? 'active' : ''}>{l.label}</a>
+      ))}
+    </nav>
+  </div>
+</header>
