@@ -3,6 +3,10 @@ export const SITE_TITLE = '개발 일지';
 export const SITE_DESCRIPTION = '배우고 만든 것들을 기록하는 블로그';
 export const AUTHOR = 'ksc';
 
+// 프로필 사진 (public 폴더 기준). public/profiles/1~6.webp 중에서 고를 수 있어요.
+// 비우면('') 코드로 그린 마스코트가 나옵니다.
+export const PROFILE_IMAGE = '/profiles/2.webp';
+
 // 화면 곳곳의 손글씨 문구 (줄바꿈은 \n)
 export const GREETING = '안녕!\n오늘도 반가워요';
 export const HERO = {

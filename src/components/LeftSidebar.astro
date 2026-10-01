@@ -4,7 +4,7 @@ import Mascot from './Mascot.astro';
 import Icon from './Icon.astro';
 import { getCategoryTree } from '../lib/posts';
 import { categoryStyle } from '../lib/theme';
-import { GREETING, NOTES, url } from '../consts';
+import { AUTHOR, GREETING, NOTES, PROFILE_IMAGE, url } from '../consts';
 
 const tree = await getCategoryTree();
 const path = decodeURI(Astro.url.pathname);
@@ -13,7 +13,11 @@ const home = url('');
 
 <aside class="left-aside card" id="left-aside">
   <div class="greet">
-    <div class="avatar"><Mascot size="78%" /></div>
+    {PROFILE_IMAGE ? (
+      <img class="avatar" src={url(PROFILE_IMAGE)} alt={`${AUTHOR} 프로필 사진`} width="108" height="108" />
+    ) : (
+      <div class="avatar"><Mascot size="78%" /></div>
+    )}
     <p>{GREETING}</p>
     <span class="heart">♥</span>
   </div>
