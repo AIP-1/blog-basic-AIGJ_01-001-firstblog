@@ -6,6 +6,8 @@ export const AUTHOR = 'ksc';
 // 화면 곳곳의 손글씨 문구 (줄바꿈은 \n)
 export const GREETING = '안녕!\n오늘도 반가워요';
 export const HERO = {
+  // public 폴더 기준 배너 그림 경로. 비우면('') 코드로 그린 기본 일러스트와 아래 문구가 나옵니다.
+  image: '/mainbanner.webp',
   left: '오늘도\n조금은 서툴지만\n그래도 괜찮아 :)',
   right: '좋은 건\n더 많이\n행복하자',
 };

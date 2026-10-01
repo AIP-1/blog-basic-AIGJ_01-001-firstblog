@@ -1,8 +1,14 @@
 ---
-// 메인 상단 배너: 창가에서 노트북 하는 마스코트 일러스트 + 손글씨 문구
-import { HERO } from '../consts';
+// 메인 상단 배너: consts.ts의 HERO.image 그림이 있으면 그 그림을,
+// 없으면 코드로 그린 마스코트 일러스트 + 손글씨 문구를 보여줍니다.
+import { HERO, url } from '../consts';
 ---
 
+{HERO.image ? (
+<section class="hero hero-image" aria-label="블로그 배너">
+  <img src={url(HERO.image)} alt="창가 침대에서 노트북을 보는 마스코트 일러스트" fetchpriority="high" />
+</section>
+) : (
 <section class="hero" aria-label="블로그 배너">
   <svg class="hero-art" viewBox="0 0 1200 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
     <defs>
@@ -109,3 +115,4 @@ import { HERO } from '../consts';
   <p class="hero-text hand">{HERO.left}</p>
   <p class="hero-note hand">{HERO.right} <span class="heart">♥</span></p>
 </section>
+)}

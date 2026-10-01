@@ -12,3 +12,6 @@ npm-debug.log*
 
 # OS
 .DS_Store
+
+# 원본 그림 (용량이 커서 저장소에는 올리지 않음)
+originals/
