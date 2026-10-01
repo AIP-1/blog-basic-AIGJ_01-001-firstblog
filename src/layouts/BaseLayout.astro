@@ -76,6 +76,11 @@ const ogImage = image ? new URL(url(image), Astro.site).href : undefined;
       <Sidebar />
     </div>
     <div class="drawer-backdrop"></div>
+    <script>
+      // 마이페이지에서 저장한 설정(프로필 사진, 문구)을 모든 페이지에 적용합니다.
+      import { loadSettings, applySettings } from '../lib/settings-store';
+      loadSettings().then(applySettings);
+    </script>
     <Footer />
   </body>
 </html>

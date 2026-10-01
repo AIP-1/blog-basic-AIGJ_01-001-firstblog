@@ -607,6 +607,54 @@ article { padding: 8px 10px 0; }
   font-size: 0.85rem;
 }
 
+/* 마이페이지 */
+.mypage { padding: 8px 10px; }
+.mypage .notice { margin: 0 0 24px; background: var(--note); border-style: solid; border-color: transparent; color: var(--text); }
+.mypage fieldset { border: 0; margin: 0 0 22px; padding: 0; }
+.mypage legend, .field > span { display: block; margin-bottom: 8px; font-weight: 600; }
+.field small { margin-left: 6px; color: var(--muted); font-weight: 400; }
+.profile-picker { display: flex; flex-wrap: wrap; gap: 12px; }
+.profile-picker label { position: relative; cursor: pointer; }
+.profile-picker input { position: absolute; opacity: 0; }
+.profile-picker img {
+  display: block;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.profile-picker label:hover img { transform: scale(1.05); }
+.profile-picker input:checked + img { border-color: var(--accent); }
+.profile-picker input:focus-visible + img { outline: 2px solid var(--accent); outline-offset: 2px; }
+.field { display: block; margin-bottom: 18px; }
+.field textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  line-height: 1.6;
+  resize: vertical;
+}
+.field textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.form-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.btn {
+  padding: 9px 20px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:hover { background: var(--accent-soft); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { filter: brightness(0.95); }
+
 /* 표 */
 .prose table { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin: 16px 0; }
 .prose th, .prose td { padding: 8px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }

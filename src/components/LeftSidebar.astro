@@ -14,11 +14,11 @@ const home = url('');
 <aside class="left-aside card" id="left-aside">
   <div class="greet">
     {PROFILE_IMAGE ? (
-      <img class="avatar" src={url(PROFILE_IMAGE)} alt={`${AUTHOR} 프로필 사진`} width="108" height="108" />
+      <img class="avatar" data-setting="profileImage" src={url(PROFILE_IMAGE)} alt={`${AUTHOR} 프로필 사진`} width="108" height="108" />
     ) : (
       <div class="avatar"><Mascot size="78%" /></div>
     )}
-    <p>{GREETING}</p>
+    <p data-setting="greeting">{GREETING}</p>
     <span class="heart">♥</span>
   </div>
 
@@ -41,7 +41,7 @@ const home = url('');
   </nav>
 
   <div class="note-card hand">
-    <p>{NOTES.left} <span class="heart">♥</span></p>
+    <p><span data-setting="noteLeft">{NOTES.left}</span> <span class="heart">♥</span></p>
     <Mascot class="note-mascot" size={72} />
   </div>
 </aside>
