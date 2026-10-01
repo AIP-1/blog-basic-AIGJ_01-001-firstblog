@@ -9,6 +9,7 @@ const path = decodeURI(Astro.url.pathname);
 const tree = await getCategoryTree();
 const links = [
   { href: url(''), label: '홈' },
+  { href: url('admin/index.html'), label: '글쓰기' },
   { href: url('tags/'), label: '태그' },
   { href: url('about/'), label: '소개' },
   { href: url('mypage/'), label: '마이페이지' },
@@ -22,7 +23,9 @@ const links = [
       <span>{SITE_TITLE}</span>
     </a>
     <nav class="nav" aria-label="주 메뉴">
-      <a href={links[0].href} class={path === links[0].href ? 'active' : ''}>{links[0].label}</a>
+      {links.slice(0, 2).map((l) => (
+        <a href={l.href} class={path === l.href ? 'active' : ''}>{l.label}</a>
+      ))}
       <div class="nav-drop">
         <button type="button" class:list={[{ active: path.startsWith(url('category/')) }]} aria-haspopup="true">
           카테고리 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6" /></svg>
@@ -33,7 +36,7 @@ const links = [
           ))}
         </ul>
       </div>
-      {links.slice(1).map((l) => (
+      {links.slice(2).map((l) => (
         <a href={l.href} class={path === l.href ? 'active' : ''}>{l.label}</a>
       ))}
     </nav>
