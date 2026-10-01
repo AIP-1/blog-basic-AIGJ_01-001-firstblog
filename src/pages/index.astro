@@ -3,13 +3,11 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostList from '../components/PostList.astro';
 import { getPosts } from '../lib/posts';
-import { SITE_DESCRIPTION } from '../consts';
 
 const posts = await getPosts();
 ---
 
-<BaseLayout>
-  <h1 class="page-title">최근 글</h1>
-  <p class="intro">{SITE_DESCRIPTION}</p>
-  <PostList posts={posts} />
+<BaseLayout hero>
+  <h1 class="sr-only">최근 글</h1>
+  <PostList posts={posts} featured />
 </BaseLayout>

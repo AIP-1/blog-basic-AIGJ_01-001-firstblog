@@ -1,0 +1,35 @@
+---
+// 댓글과 공감 버튼 (giscus: GitHub Discussions에 댓글이 저장됩니다)
+// 방문자는 GitHub 계정으로 댓글을 달고, 글에 이모지로 공감을 남길 수 있어요.
+import { GISCUS } from '../consts';
+
+const ready = GISCUS.repoId && GISCUS.categoryId;
+---
+
+{ready ? (
+  <section class="comments">
+    <script
+      is:inline
+      src="https://giscus.app/client.js"
+      data-repo={GISCUS.repo}
+      data-repo-id={GISCUS.repoId}
+      data-category={GISCUS.category}
+      data-category-id={GISCUS.categoryId}
+      data-mapping="pathname"
+      data-strict="1"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="top"
+      data-theme="preferred_color_scheme"
+      data-lang="ko"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
+) : import.meta.env.DEV && (
+  <p class="notice">
+    댓글 영역: <code>src/consts.ts</code>의 <code>GISCUS</code> 값을 채우면 여기에 댓글과 공감 버튼이 나타나요.
+    (이 안내는 로컬에서만 보입니다)
+  </p>
+)}

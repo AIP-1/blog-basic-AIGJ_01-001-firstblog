@@ -1,0 +1,43 @@
+---
+// 왼쪽 사이드바: 프로필 인사, 카테고리 메뉴(아이콘), 손글씨 메모 카드
+import Mascot from './Mascot.astro';
+import Icon from './Icon.astro';
+import { getCategoryTree } from '../lib/posts';
+import { categoryStyle } from '../lib/theme';
+import { GREETING, NOTES, url } from '../consts';
+
+const tree = await getCategoryTree();
+const path = decodeURI(Astro.url.pathname);
+const home = url('');
+---
+
+<aside class="left-aside card" id="left-aside">
+  <div class="greet">
+    <div class="avatar"><Mascot size="78%" /></div>
+    <p>{GREETING}</p>
+    <span class="heart">♥</span>
+  </div>
+
+  <nav class="cat-nav" aria-label="카테고리">
+    <a href={home} class={path === home ? 'active' : ''}><Icon name="home" /> 홈</a>
+    {tree.map((node) => {
+      const href = url(`category/${node.path}/`);
+      return (
+        <>
+          <a href={href} class={path === decodeURI(href) ? 'active' : ''}>
+            <Icon name={categoryStyle(node.name).icon} /> {node.name}
+          </a>
+          {node.children.map((c) => {
+            const sub = url(`category/${c.path}/`);
+            return <a href={sub} class:list={['sub', { active: path === decodeURI(sub) }]}>{c.name}</a>;
+          })}
+        </>
+      );
+    })}
+  </nav>
+
+  <div class="note-card hand">
+    <p>{NOTES.left} <span class="heart">♥</span></p>
+    <Mascot class="note-mascot" size={72} />
+  </div>
+</aside>

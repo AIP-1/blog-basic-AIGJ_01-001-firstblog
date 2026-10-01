@@ -1,0 +1,34 @@
+---
+// 글 카드 한 장: 썸네일 + 카테고리 라벨 + 제목 + 요약 + 날짜/읽는 시간
+import FormattedDate from './FormattedDate.astro';
+import Thumb from './Thumb.astro';
+import Icon from './Icon.astro';
+import { categoryParts, isScheduled, readingTime, type Post } from '../lib/posts';
+import { categoryStyle, topCategory } from '../lib/theme';
+import { url } from '../consts';
+
+interface Props {
+  post: Post;
+  featured?: boolean;
+}
+const { post, featured = false } = Astro.props;
+---
+
+<a class:list={['post-card card', { featured }]} href={url(`blog/${post.id}/`)}>
+  <Thumb post={post} />
+  <div class="post-card-body">
+    <span class="pill" style={`--c:${categoryStyle(topCategory(post)).color}`}>
+      {categoryParts(post.data.category).join(' › ')}
+    </span>
+    <h2>
+      {post.data.title}
+      {post.data.draft && <span class="badge">초안</span>}
+      {isScheduled(post) && <span class="badge">예약</span>}
+    </h2>
+    <p>{post.data.description}</p>
+    <div class="meta">
+      <FormattedDate date={post.data.pubDate} />
+      <span class="read"><Icon name="clock" size={14} /> {readingTime(post.body)}분</span>
+    </div>
+  </div>
+</a>

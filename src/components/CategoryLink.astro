@@ -1,0 +1,22 @@
+---
+// '개발/Astro' 같은 카테고리를 '개발 › Astro' 처럼 단계별 링크로 보여줍니다.
+import { categoryParts } from '../lib/posts';
+import { url } from '../consts';
+
+interface Props {
+  category: string;
+}
+const parts = categoryParts(Astro.props.category);
+---
+
+<span class="category">
+  {parts.map((name, i) => {
+    const path = parts.slice(0, i + 1).join('/');
+    return (
+      <>
+        {i > 0 && <span class="sep">›</span>}
+        <a href={url(`category/${path}/`)}>{name}</a>
+      </>
+    );
+  })}
+</span>

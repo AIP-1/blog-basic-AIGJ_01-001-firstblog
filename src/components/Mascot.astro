@@ -1,0 +1,36 @@
+---
+// 블로그 마스코트: 새싹이 달린 몽실몽실한 강아지 (로고, 프로필, 썸네일에서 재사용)
+interface Props {
+  size?: number | string;
+  class?: string;
+  sprout?: boolean;
+}
+const { size = 48, class: className, sprout = true } = Astro.props;
+---
+
+<svg class:list={['mascot', className]} width={size} height={size} viewBox="0 0 100 100" aria-hidden="true">
+  {sprout && (
+    <g>
+      <path d="M50 26 C50 20 50 16 50 13" stroke="#7aa35a" stroke-width="2.5" fill="none" stroke-linecap="round" />
+      <path d="M50 16 C44 10 37 12 37 16 C41 19 47 19 50 16Z" fill="#9cc26f" stroke="#6d9450" stroke-width="1.5" />
+      <path d="M50 15 C55 8 63 9 64 13 C60 17 54 18 50 15Z" fill="#9cc26f" stroke="#6d9450" stroke-width="1.5" />
+    </g>
+  )}
+  <path
+    d="M50 24 C60 22 68 26 72 32 C80 31 86 37 85 45 C91 50 91 60 86 66 C88 75 81 83 72 82 C66 89 56 90 50 86 C44 90 34 89 28 82 C19 83 12 75 14 66 C9 60 9 50 15 45 C14 37 20 31 28 32 C32 26 40 22 50 24Z"
+    fill="#fffdf8"
+    stroke="#5b4a3f"
+    stroke-width="2.4"
+    stroke-linejoin="round"
+  />
+  <path d="M22 42 C14 48 14 62 22 66 C26 60 27 48 22 42Z" fill="#f6eadb" stroke="#5b4a3f" stroke-width="2" stroke-linejoin="round" />
+  <path d="M78 42 C86 48 86 62 78 66 C74 60 73 48 78 42Z" fill="#f6eadb" stroke="#5b4a3f" stroke-width="2" stroke-linejoin="round" />
+  <ellipse cx="33" cy="64" rx="7" ry="4.5" fill="#f9b8a8" opacity="0.85" />
+  <ellipse cx="67" cy="64" rx="7" ry="4.5" fill="#f9b8a8" opacity="0.85" />
+  <circle cx="39" cy="56" r="3.6" fill="#3d3029" />
+  <circle cx="61" cy="56" r="3.6" fill="#3d3029" />
+  <circle cx="40.2" cy="54.8" r="1.1" fill="#fff" />
+  <circle cx="62.2" cy="54.8" r="1.1" fill="#fff" />
+  <ellipse cx="50" cy="61" rx="2.6" ry="2" fill="#3d3029" />
+  <path d="M45 64.5 C47 67.5 50 66.5 50 63.5 C50 66.5 53 67.5 55 64.5" stroke="#3d3029" stroke-width="1.8" fill="none" stroke-linecap="round" />
+</svg>

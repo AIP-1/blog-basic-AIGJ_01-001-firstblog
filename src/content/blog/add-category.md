@@ -2,7 +2,7 @@
 title: '블로그에 카테고리 붙이기'
 description: '티스토리처럼 카테고리와 사이드바를 만들어 본 과정'
 pubDate: '2026-10-01T13:30:00+09:00'
-category: '개발'
+category: '개발/Astro'
 tags: ['astro', '블로그']
 ---
 
@@ -15,7 +15,7 @@ tags: ['astro', '블로그']
 ```md
 ---
 title: '글 제목'
-category: '개발'
+category: '개발/Astro'
 ---
 ```
 

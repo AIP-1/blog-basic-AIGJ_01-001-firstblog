@@ -12,4 +12,10 @@ export default defineConfig({
   site,
   base,
   integrations: [mdx(), sitemap()],
+  // 코드 블록 색상: 라이트/다크 모드에 맞춰 자동으로 바뀝니다.
+  markdown: {
+    shikiConfig: {
+      themes: { light: 'github-light', dark: 'github-dark' },
+    },
+  },
 });

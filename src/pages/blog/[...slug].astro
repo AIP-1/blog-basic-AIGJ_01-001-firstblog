@@ -3,40 +3,92 @@
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
-import { getPosts } from '../../lib/posts';
+import CategoryLink from '../../components/CategoryLink.astro';
+import Comments from '../../components/Comments.astro';
+import { getPosts, readingTime, isScheduled } from '../../lib/posts';
 import { url } from '../../consts';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+  // posts는 최신순이라 index - 1 이 다음(더 최근) 글, index + 1 이 이전 글입니다.
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+  }));
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+const { post, newer, older } = Astro.props;
+const { Content, headings } = await render(post);
+// 소제목(##, ###)이 2개 이상이면 목차를 보여줍니다.
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.image}
+  article={{ publishedTime: post.data.pubDate, modifiedTime: post.data.updatedDate, tags: post.data.tags }}
+>
   <article>
     <header class="post-header">
-      <a class="category" href={url(`category/${post.data.category}/`)}>{post.data.category}</a>
+      <CategoryLink category={post.data.category} />
       <h1>{post.data.title}</h1>
       <div class="meta">
         <FormattedDate date={post.data.pubDate} />
-        {post.data.tags.length > 0 && (
-          <>
-            {' · '}
-            <span class="tags">
-              {post.data.tags.map((tag) => (
-                <a class="tag" href={url(`tags/${tag}/`)}>#{tag}</a>
-              ))}
-            </span>
-          </>
-        )}
+        {post.data.updatedDate && <> (수정 <FormattedDate date={post.data.updatedDate} />)</>}
+        {' · '}{readingTime(post.body)}분 읽기
+        {post.data.draft && <span class="badge">초안</span>}
+        {isScheduled(post) && <span class="badge">예약</span>}
       </div>
+      {post.data.tags.length > 0 && (
+        <div class="tags post-tags">
+          {post.data.tags.map((tag) => (
+            <a class="tag" href={url(`tags/${tag}/`)}>#{tag}</a>
+          ))}
+        </div>
+      )}
     </header>
+
+    {toc.length >= 2 && (
+      <details class="toc" open>
+        <summary>목차</summary>
+        <ul>
+          {toc.map((h) => (
+            <li class={`depth-${h.depth}`}><a href={`#${h.slug}`}>{h.text}</a></li>
+          ))}
+        </ul>
+      </details>
+    )}
+
     <div class="prose">
       <Content />
     </div>
   </article>
-  <p><a href={url('')}>← 목록으로</a></p>
+
+  <nav class="post-nav">
+    {older ? (
+      <a href={url(`blog/${older.id}/`)}><small>← 이전 글</small>{older.data.title}</a>
+    ) : <span />}
+    {newer && (
+      <a class="next" href={url(`blog/${newer.id}/`)}><small>다음 글 →</small>{newer.data.title}</a>
+    )}
+  </nav>
+
+  <Comments />
 </BaseLayout>
+
+<script>
+  // 코드 블록마다 '복사' 버튼을 붙입니다.
+  document.querySelectorAll('.prose pre').forEach((pre) => {
+    const button = document.createElement('button');
+    button.className = 'copy-btn';
+    button.type = 'button';
+    button.textContent = '복사';
+    button.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(pre.querySelector('code')?.innerText ?? '');
+      button.textContent = '복사됨!';
+      setTimeout(() => (button.textContent = '복사'), 1500);
+    });
+    pre.append(button);
+  });
+</script>

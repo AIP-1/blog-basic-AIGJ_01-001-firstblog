@@ -3,16 +3,25 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Sidebar from '../components/Sidebar.astro';
-import { SITE_TITLE, SITE_DESCRIPTION, url } from '../consts';
+import LeftSidebar from '../components/LeftSidebar.astro';
+import Hero from '../components/Hero.astro';
+import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR, url } from '../consts';
 import '../styles/global.css';
 
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
+  // 글 상세 페이지일 때만 넘겨서 검색엔진/SNS에 '글'임을 알려줍니다.
+  article?: { publishedTime: Date; modifiedTime?: Date; tags: string[] };
+  // 메인 페이지처럼 상단 배너를 보여줄지
+  hero?: boolean;
 }
 
-const { title, description = SITE_DESCRIPTION } = Astro.props;
+const { title, description = SITE_DESCRIPTION, image, article, hero = false } = Astro.props;
 const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image ? new URL(url(image), Astro.site).href : undefined;
 ---
 
 <!doctype html>
@@ -22,22 +31,51 @@ const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={AUTHOR} />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
     <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={url('rss.xml')} />
     <link rel="sitemap" href={url('sitemap-index.xml')} />
+
+    <!-- 카카오톡·SNS 공유 미리보기 (Open Graph) -->
+    <meta property="og:site_name" content={SITE_TITLE} />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:title" content={title ?? SITE_TITLE} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    {article && (
+      <>
+        <meta property="article:published_time" content={article.publishedTime.toISOString()} />
+        {article.modifiedTime && (
+          <meta property="article:modified_time" content={article.modifiedTime.toISOString()} />
+        )}
+        {article.tags.map((tag) => <meta property="article:tag" content={tag} />)}
+      </>
+    )}
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
+    <!-- 손글씨 문구용 글꼴 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap" />
   </head>
   <body>
     <Header />
+    {hero && <div class="container"><Hero /></div>}
     <div class="container layout">
-      <main>
+      <LeftSidebar />
+      <main class="main-panel card">
         <slot />
       </main>
       <Sidebar />
     </div>
+    <div class="drawer-backdrop"></div>
     <Footer />
   </body>
 </html>

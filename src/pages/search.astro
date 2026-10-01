@@ -1,0 +1,70 @@
+---
+// 검색 페이지: 서버 없이 브라우저에서 search.json을 받아 바로 찾습니다.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../consts';
+---
+
+<BaseLayout title="검색">
+  <h1 class="page-title">검색</h1>
+  <p class="intro">제목, 내용, 카테고리, 태그에서 찾아요.</p>
+  <input id="q" class="search-input" type="search" placeholder="검색어를 입력하세요" autofocus />
+  <p id="status" class="meta"></p>
+  <ul id="results" class="post-list"></ul>
+</BaseLayout>
+
+<script define:vars={{ dataUrl: url('search.json') }}>
+  const input = document.getElementById('q');
+  const results = document.getElementById('results');
+  const status = document.getElementById('status');
+  let posts = [];
+
+  const escape = (s) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+  const fmt = (iso) =>
+    new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Seoul' });
+
+  // 검색어 주변 본문을 잘라서 보여줍니다.
+  function snippet(post, word) {
+    const i = post.body.toLowerCase().indexOf(word);
+    if (i < 0) return escape(post.description);
+    const start = Math.max(0, i - 40);
+    return (start > 0 ? '…' : '') + escape(post.body.slice(start, i + 80)) + '…';
+  }
+
+  function search() {
+    const q = input.value.trim().toLowerCase();
+    const params = new URLSearchParams(location.search);
+    q ? params.set('q', input.value.trim()) : params.delete('q');
+    history.replaceState(null, '', params.size ? `?${params}` : location.pathname);
+
+    if (!q) {
+      results.innerHTML = '';
+      status.textContent = '';
+      return;
+    }
+    const words = q.split(/\s+/);
+    const found = posts.filter((p) => {
+      const text = [p.title, p.description, p.category, p.tags.join(' '), p.body].join(' ').toLowerCase();
+      return words.every((w) => text.includes(w));
+    });
+    status.textContent = `${found.length}개의 글을 찾았어요.`;
+    results.innerHTML = found
+      .map(
+        (p) => `<li>
+          <span class="category">${escape(p.category.replaceAll('/', ' › '))}</span>
+          <h2><a href="${p.url}">${escape(p.title)}</a></h2>
+          <p>${snippet(p, words[0])}</p>
+          <div class="meta">${fmt(p.date)}</div>
+        </li>`,
+      )
+      .join('');
+  }
+
+  fetch(dataUrl)
+    .then((r) => r.json())
+    .then((data) => {
+      posts = data;
+      input.value = new URLSearchParams(location.search).get('q') ?? '';
+      search();
+    });
+  input.addEventListener('input', search);
+</script>

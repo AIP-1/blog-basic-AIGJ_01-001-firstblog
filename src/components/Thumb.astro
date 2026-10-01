@@ -1,0 +1,30 @@
+---
+// 글 썸네일: frontmatter에 image가 있으면 그 이미지를, 없으면 카테고리 색의 일러스트를 보여줍니다.
+import Mascot from './Mascot.astro';
+import { url } from '../consts';
+import { categoryStyle, topCategory } from '../lib/theme';
+import type { Post } from '../lib/posts';
+
+interface Props {
+  post: Post;
+  class?: string;
+}
+const { post, class: className } = Astro.props;
+const { color } = categoryStyle(topCategory(post));
+// 글마다 조금씩 다른 장면이 나오도록 id로 변형을 고릅니다.
+const variant = [...post.id].reduce((h, c) => h + c.charCodeAt(0), 0) % 3;
+---
+
+<div class:list={['thumb', className]} style={`--c:${color}`}>
+  {post.data.image ? (
+    <img src={url(post.data.image)} alt="" loading="lazy" />
+  ) : (
+    <div class={`thumb-art v${variant}`}>
+      <span class="sun"></span>
+      <span class="cloud c1"></span>
+      <span class="cloud c2"></span>
+      <span class="hill"></span>
+      <Mascot class="thumb-mascot" size="100%" sprout={variant !== 1} />
+    </div>
+  )}
+</div>

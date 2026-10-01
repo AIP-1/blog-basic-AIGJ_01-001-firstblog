@@ -1,21 +1,21 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import FormattedDate from './FormattedDate.astro';
-import { url } from '../consts';
+// 글 목록을 카드로 보여줍니다. featured면 첫 글을 크게, 나머지는 2열 카드로.
+import PostCard from './PostCard.astro';
+import type { Post } from '../lib/posts';
 
 interface Props {
-  posts: CollectionEntry<'blog'>[];
+  posts: Post[];
+  featured?: boolean;
 }
-const { posts } = Astro.props;
+const { posts, featured = false } = Astro.props;
+const lead = featured ? posts[0] : undefined;
+const grid = lead ? posts.slice(1) : posts;
 ---
 
-<ul class="post-list">
-  {posts.map((post) => (
-    <li>
-      <a class="category" href={url(`category/${post.data.category}/`)}>{post.data.category}</a>
-      <h2><a href={url(`blog/${post.id}/`)}>{post.data.title}</a></h2>
-      <p>{post.data.description}</p>
-      <div class="meta"><FormattedDate date={post.data.pubDate} /></div>
-    </li>
-  ))}
-</ul>
+{posts.length === 0 && <p class="empty">아직 글이 없어요.</p>}
+{lead && <PostCard post={lead} featured />}
+{grid.length > 0 && (
+  <div class="post-grid">
+    {grid.map((post) => <PostCard post={post} />)}
+  </div>
+)}

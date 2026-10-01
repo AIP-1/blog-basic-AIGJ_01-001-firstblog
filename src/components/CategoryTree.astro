@@ -1,0 +1,25 @@
+---
+// 카테고리 트리를 그립니다. 하위 카테고리가 있으면 자기 자신을 다시 불러 들여쓰기합니다.
+import type { CategoryNode } from '../lib/posts';
+import { url } from '../consts';
+
+interface Props {
+  nodes: CategoryNode[];
+  current: string;
+}
+const { nodes, current } = Astro.props;
+---
+
+<ul class="side-list tree">
+  {nodes.map((node) => {
+    const href = url(`category/${node.path}/`);
+    return (
+      <li>
+        <a href={href} class={current === decodeURI(href) ? 'active' : ''}>
+          {node.name} <span class="count">({node.count})</span>
+        </a>
+        {node.children.length > 0 && <Astro.self nodes={node.children} current={current} />}
+      </li>
+    );
+  })}
+</ul>

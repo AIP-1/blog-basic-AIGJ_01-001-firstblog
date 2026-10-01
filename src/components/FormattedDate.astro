@@ -3,8 +3,9 @@ interface Props {
   date: Date;
 }
 const { date } = Astro.props;
+// GitHub Actions 서버는 UTC 기준이라, 한국 시간으로 고정해 날짜가 하루 밀리지 않게 합니다.
 ---
 
 <time datetime={date.toISOString()}>
-  {date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
+  {date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Seoul' })}
 </time>

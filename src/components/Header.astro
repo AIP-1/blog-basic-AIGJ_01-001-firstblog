@@ -1,22 +1,58 @@
 ---
+import Mascot from './Mascot.astro';
+import Icon from './Icon.astro';
 import { SITE_TITLE, url } from '../consts';
+import { getCategoryTree } from '../lib/posts';
 
 // 현재 주소를 보고 메뉴에 active 표시
-const path = Astro.url.pathname;
+const path = decodeURI(Astro.url.pathname);
+const tree = await getCategoryTree();
 const links = [
-  { href: url(''), label: '글' },
+  { href: url(''), label: '홈' },
   { href: url('tags/'), label: '태그' },
   { href: url('about/'), label: '소개' },
 ];
 ---
 
 <header class="site-header">
-  <div class="container">
-    <a class="logo" href={url('')}>{SITE_TITLE}</a>
-    <nav class="nav">
-      {links.map((l) => (
+  <div class="container header-inner">
+    <a class="logo" href={url('')}>
+      <Mascot size={40} sprout={false} />
+      <span>{SITE_TITLE}</span>
+    </a>
+    <nav class="nav" aria-label="주 메뉴">
+      <a href={links[0].href} class={path === links[0].href ? 'active' : ''}>{links[0].label}</a>
+      <div class="nav-drop">
+        <button type="button" class:list={[{ active: path.startsWith(url('category/')) }]} aria-haspopup="true">
+          카테고리 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6" /></svg>
+        </button>
+        <ul class="drop-menu">
+          {tree.map((node) => (
+            <li><a href={url(`category/${node.path}/`)}>{node.name} <span class="count">{node.count}</span></a></li>
+          ))}
+        </ul>
+      </div>
+      {links.slice(1).map((l) => (
         <a href={l.href} class={path === l.href ? 'active' : ''}>{l.label}</a>
       ))}
     </nav>
+    <div class="header-tools">
+      <a class="icon-btn" href={url('search/')} aria-label="검색"><Icon name="search" size={22} /></a>
+      <button class="icon-btn menu-btn" type="button" aria-label="메뉴 열기" aria-controls="left-aside" aria-expanded="false">
+        <Icon name="menu" size={22} />
+      </button>
+    </div>
   </div>
 </header>
+
+<script>
+  // 좁은 화면에서 왼쪽 사이드바를 서랍처럼 열고 닫습니다.
+  const btn = document.querySelector<HTMLButtonElement>('.menu-btn');
+  const toggle = (open: boolean) => {
+    document.body.classList.toggle('menu-open', open);
+    btn?.setAttribute('aria-expanded', String(open));
+  };
+  btn?.addEventListener('click', () => toggle(!document.body.classList.contains('menu-open')));
+  document.querySelector('.drawer-backdrop')?.addEventListener('click', () => toggle(false));
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && toggle(false));
+</script>
