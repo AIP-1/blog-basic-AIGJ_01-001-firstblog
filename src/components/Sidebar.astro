@@ -1,0 +1,53 @@
+---
+// 티스토리처럼 오른쪽에 붙는 사이드바: 프로필, 카테고리, 최근 글
+import { getPosts, getCategories } from '../lib/posts';
+import { AUTHOR, SITE_DESCRIPTION, url } from '../consts';
+
+const posts = await getPosts();
+const categories = await getCategories();
+const recent = posts.slice(0, 5);
+
+// 지금 보고 있는 카테고리를 강조 표시하기 위해 주소를 확인
+const path = decodeURI(Astro.url.pathname);
+const isActive = (href: string) => path === decodeURI(href);
+---
+
+<aside class="sidebar">
+  <section class="side-box profile">
+    <div class="avatar">{AUTHOR.slice(0, 1).toUpperCase()}</div>
+    <div>
+      <strong>{AUTHOR}</strong>
+      <p>{SITE_DESCRIPTION}</p>
+    </div>
+  </section>
+
+  <section class="side-box">
+    <h3>카테고리</h3>
+    <ul class="side-list">
+      <li>
+        <a href={url('')} class={isActive(url('')) ? 'active' : ''}>
+          전체 <span class="count">({posts.length})</span>
+        </a>
+      </li>
+      {categories.map((c) => {
+        const href = url(`category/${c.name}/`);
+        return (
+          <li class="sub">
+            <a href={href} class={isActive(href) ? 'active' : ''}>
+              {c.name} <span class="count">({c.count})</span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+
+  <section class="side-box">
+    <h3>최근 글</h3>
+    <ul class="side-list recent">
+      {recent.map((post) => (
+        <li><a href={url(`blog/${post.id}/`)}>{post.data.title}</a></li>
+      ))}
+    </ul>
+  </section>
+</aside>

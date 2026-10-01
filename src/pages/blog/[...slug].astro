@@ -18,6 +18,7 @@ const { Content } = await render(post);
 <BaseLayout title={post.data.title} description={post.data.description}>
   <article>
     <header class="post-header">
+      <a class="category" href={url(`category/${post.data.category}/`)}>{post.data.category}</a>
       <h1>{post.data.title}</h1>
       <div class="meta">
         <FormattedDate date={post.data.pubDate} />

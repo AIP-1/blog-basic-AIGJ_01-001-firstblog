@@ -2,6 +2,7 @@
 title: '자주 쓰는 Git 명령어 정리'
 description: '블로그를 올리면서 쓴 git 명령어들'
 pubDate: '2026-10-01T12:00:00+09:00'
+category: '개발'
 tags: ['git', '정리']
 ---
 

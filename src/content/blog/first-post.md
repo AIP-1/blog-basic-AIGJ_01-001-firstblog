@@ -2,6 +2,7 @@
 title: '블로그를 시작합니다'
 description: 'Astro로 블로그를 만들고 GitHub Pages에 배포하기까지'
 pubDate: '2026-10-01'
+category: '일상'
 tags: ['회고', 'astro']
 ---
 

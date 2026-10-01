@@ -20,6 +20,7 @@ npm run preview  # 빌드 결과 미리보기
 title: '글 제목'
 description: '한 줄 요약'
 pubDate: '2026-10-01'
+category: '개발' # 생략하면 '일반'
 tags: ['태그1', '태그2']
 draft: false   # true면 목록에서 숨김
 ---

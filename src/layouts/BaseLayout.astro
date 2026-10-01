@@ -2,6 +2,7 @@
 // 모든 페이지가 공통으로 쓰는 뼈대(head, 헤더, 푸터)
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Sidebar from '../components/Sidebar.astro';
 import { SITE_TITLE, SITE_DESCRIPTION, url } from '../consts';
 import '../styles/global.css';
 
@@ -31,9 +32,12 @@ const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
   </head>
   <body>
     <Header />
-    <main class="container">
-      <slot />
-    </main>
+    <div class="container layout">
+      <main>
+        <slot />
+      </main>
+      <Sidebar />
+    </div>
     <Footer />
   </body>
 </html>

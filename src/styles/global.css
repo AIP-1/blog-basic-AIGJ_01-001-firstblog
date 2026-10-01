@@ -5,7 +5,7 @@
   --line: #e7e5e0;
   --accent: #2f6f5e;
   --code-bg: #f1efea;
-  --max: 720px;
+  --max: 1040px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -75,7 +75,7 @@ h1, h2, h3 { line-height: 1.35; letter-spacing: -0.01em; }
 .post-list li:last-child { border-bottom: none; }
 .post-list h2 { margin: 0 0 4px; font-size: 1.2rem; }
 .post-list h2 a { color: var(--text); }
-.post-list p { margin: 4px 0 0; color: var(--muted); }
+.post-list p { margin: 4px 0 8px; color: var(--muted); }
 
 .meta { color: var(--muted); font-size: 0.85rem; }
 .tags { display: inline-flex; gap: 8px; flex-wrap: wrap; }
@@ -115,3 +115,71 @@ h1, h2, h3 { line-height: 1.35; letter-spacing: -0.01em; }
 
 .page-title { font-size: 1.6rem; margin: 0 0 8px; }
 .intro { color: var(--muted); margin: 0 0 32px; }
+
+/* 본문 + 사이드바 2단 레이아웃 (좁은 화면에서는 위아래로) */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 56px;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; gap: 40px; }
+}
+
+/* 카테고리 라벨 */
+.category {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+/* 사이드바 */
+.sidebar {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  font-size: 0.92rem;
+}
+@media (max-width: 860px) {
+  .sidebar { position: static; }
+}
+.side-box h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin: 0 0 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.profile { display: flex; gap: 14px; align-items: center; }
+.profile p { margin: 2px 0 0; color: var(--muted); font-size: 0.85rem; line-height: 1.5; }
+.avatar {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+.side-list { list-style: none; padding: 0; margin: 0; }
+.side-list li { padding: 4px 0; }
+.side-list li.sub { padding-left: 14px; }
+.side-list a { color: var(--text); }
+.side-list a.active { color: var(--accent); font-weight: 600; }
+.side-list .count { color: var(--muted); font-size: 0.85em; }
+.side-list.recent a {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

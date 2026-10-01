@@ -12,9 +12,10 @@ const { posts } = Astro.props;
 <ul class="post-list">
   {posts.map((post) => (
     <li>
+      <a class="category" href={url(`category/${post.data.category}/`)}>{post.data.category}</a>
       <h2><a href={url(`blog/${post.id}/`)}>{post.data.title}</a></h2>
-      <div class="meta"><FormattedDate date={post.data.pubDate} /></div>
       <p>{post.data.description}</p>
+      <div class="meta"><FormattedDate date={post.data.pubDate} /></div>
     </li>
   ))}
 </ul>
